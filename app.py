@@ -2,6 +2,7 @@ from flask import Flask,flash,redirect,request,url_for,render_template,session,s
 from flask_session import Session
 from flask_mysqldb import MySQL
 from otp import genotp
+import mysql.connector
 from mail import sendmail
 import random
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -10,10 +11,17 @@ from io import BytesIO
 app=Flask(__name__)
 app.secret_key='876@#^%jh'
 app.config['SESSION_TYPE']='filesystem'
-app.config['MYSQL_HOST']='localhost'
-app.config['MYSQL_USER']='root'
-app.config['MYSQL_PASSWORD']='admin'
-app.config['MYSQL_DB']='application'
+db=OS.environ['RDS_DB_NAME']
+user=OS.environ['RDS_USERNAME']
+password=OS.environ['RDS_PASSWORD']
+host=Os.environ['RDS_HOSTNAME']
+port=OS.environ['RDS_PORT']
+mydb=mysql.connector.connect(host=host,user=user,password=password,db=db,port=port)
+with mysql.connector.connect(host='host',user='user',password='password',db='db',port='port') as conn:
+    cursor=conn.cursor()
+    cursor.execute('create table if not exists details(name varchar(30) primary key,email varchar(30),password varchar(30),gender char(10))')
+    cursor.execute()'create  table if not exists blogs(blogid varchar(30) primary key auto_increment,name varchar(30),title tinytext,description longtext,date datetime default current_timestamp,Categories enum('Python','Java','Html','CSS','Artificial Intelligence'),username varchar(30),foreign key(name) references details(name))))
+mysql=MYSQL(app)
 Session(app)
 mysql=MySQL(app)
 @app.route('/')
